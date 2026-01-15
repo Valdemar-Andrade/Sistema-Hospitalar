@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Sistema Hospitalar</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header class="header">
+        <h1>🏥 Sistema Hospitalar</h1>
+        <nav>
+            <span th:text="'Bem-vindo, ' + ${usuario}"></span>
+            <a href="/logout" class="btn-logout">Sair</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <h2>Painel Administrativo</h2>
+        
+        <div class="dashboard-cards">
+            <a href="/admin/pacientes" class="card">
+                <span class="card-icon">👥</span>
+                <h3>Pacientes</h3>
+                <p>Gerenciar cadastros</p>
+            </a>
+            
+            <a href="/admin/medicos" class="card">
+                <span class="card-icon">👨‍⚕️</span>
+                <h3>Médicos</h3>
+                <p>Gerenciar profissionais</p>
+            </a>
+            
+            <a href="/admin/enfermeiros" class="card">
+                <span class="card-icon">👩‍⚕️</span>
+                <h3>Enfermeiros</h3>
+                <p>Gerenciar enfermagem</p>
+            </a>
+            
+            <a href="/admin/especialidades" class="card">
+                <span class="card-icon">🎯</span>
+                <h3>Especialidades</h3>
+                <p>Gerenciar áreas</p>
+            </a>
+            
+            <a href="/admin/configuracoes" class="card">
+                <span class="card-icon">⚙️</span>
+                <h3>Configurações</h3>
+                <p>Ajustes do sistema</p>
+            </a>
+        </div>
+    </main>
+</body>
+</html>
