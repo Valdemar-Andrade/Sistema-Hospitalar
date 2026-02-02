@@ -60,6 +60,29 @@ O sistema permite o cadastro e gerenciamento de pacientes, agendamento de consul
 
 ---
 
+### Credenciais Padrão
+
+Na primeira execução, uma conta de administrador é criada automaticamente:
+- **Login:** admin
+- **Senha:** admin123
+
+> ⚠️ **Importante:** Altere a senha padrão após o primeiro acesso!
+
+---
+
+## Entidades Principais
+
+| Entidade | Descrição |
+|----------|-----------|
+| **Paciente** | Dados pessoais, documentos, histórico médico |
+| **Medico** | Dados do profissional, especialidade, horários |
+| **Enfermeiro** | Dados do profissional, COREN |
+| **Consulta** | Agendamentos, diagnósticos, prescrições |
+| **Triagem** | Sinais vitais, classificação de risco |
+| **Especialidade** | Áreas de atuação médica |
+
+---
+
 ## Estrutura do Projeto
 
 ```
@@ -119,28 +142,103 @@ cd sistema-hospitalar
 
 A aplicação estará disponível em: `http://localhost:8080`
 
-### Credenciais Padrão
+## Estrutura de Testes
+- **Cobertura JaCoCo**: Relatório disponível em `target/jacoco-report/`
 
-Na primeira execução, uma conta de administrador é criada automaticamente:
-- **Login:** admin
-- **Senha:** admin123
+```
+src/test/java/com/hospital/sistema/
+├── controller/
+│   ├── PacienteControllerTest.java    # Testes @WebMvcTest
+│   ├── ConsultaControllerTest.java
+│   └── LoginControllerTest.java
+├── service/
+│   ├── PacienteServiceTest.java       # Testes com Mockito
+│   ├── ConsultaServiceTest.java
+│   ├── MedicoServiceTest.java
+│   ├── AutenticacaoServiceTest.java
+│   └── TriagemServiceTest.java
+├── repository/
+│   └── PacienteRepositoryTest.java    # Testes @DataJpaTest
+├── util/
+│   ├── ValidadorDocumentoTest.java
+│   ├── SenhaUtilsTest.java
+│   └── FilaTriagemTest.java
+├── integration/
+│   ├── PacienteIntegrationTest.java   # Testes @SpringBootTest
+│   └── ConsultaIntegrationTest.java
+└── SistemaHospitalarApplicationTests.java
+```
+## Como Executar os Testes
 
-> ⚠️ **Importante:** Altere a senha padrão após o primeiro acesso!
+### Todos os Testes
+```bash
+mvn test -Dspring.profiles.active=test
+```
 
----
+### Com Relatório de Cobertura
+```bash
+mvn test jacoco:report
+# Relatório em: target/jacoco-report/index.html
+```
 
-## Entidades Principais
+### Testes Específicos
+```bash
+# Apenas testes unitários de service
+mvn test -Dtest="*ServiceTest"
 
-| Entidade | Descrição |
-|----------|-----------|
-| **Paciente** | Dados pessoais, documentos, histórico médico |
-| **Medico** | Dados do profissional, especialidade, horários |
-| **Enfermeiro** | Dados do profissional, COREN |
-| **Consulta** | Agendamentos, diagnósticos, prescrições |
-| **Triagem** | Sinais vitais, classificação de risco |
-| **Especialidade** | Áreas de atuação médica |
+# Apenas testes de controller
+mvn test -Dtest="*ControllerTest"
 
----
+# Apenas testes de integração
+mvn test -Dtest="*IntegrationTest"
+
+# Teste específico
+mvn test -Dtest="PacienteServiceTest#deveSalvarPacienteComDadosValidos"
+```
+
+## 📚 Dependências de Teste
+
+```xml
+<!-- JUnit 5, Mockito, AssertJ (inclusos no starter-test) -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<!-- H2 Database para testes -->
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
+
+## 🔧 Configuração de Teste
+
+### application-test.properties
+```properties
+# Banco H2 em memória
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driver-class-name=org.h2.Driver
+spring.jpa.hibernate.ddl-auto=create-drop
+```
+
+## 📈 JaCoCo - Cobertura de Código
+
+O JaCoCo está configurado para:
+- Gerar relatórios após execução dos testes
+- Verificar cobertura mínima de 50% de linhas
+- Relatório HTML em `target/jacoco-report/`
+
+```bash
+# Gerar relatório
+mvn test jacoco:report
+
+# Verificar cobertura (falha se < 50%)
+mvn verify
+```
 
 ## Melhorias Futuras
 
